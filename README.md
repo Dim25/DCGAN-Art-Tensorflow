@@ -1,4 +1,4 @@
-Fork of sinanatra/DCGAN-Art-Tensorflow with updates to `model.py` and `util.py`
+Fork of @sinanatra's __DCGANwith__ updates to `model.py` and `util.py`  
 Original code available here: https://github.com/sinanatra/DCGAN-Art-Tensorflow
 
 ------
