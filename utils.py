@@ -7,12 +7,19 @@ import json
 import random
 import pprint
 import scipy.misc
+import imageio
 import numpy as np
 from time import gmtime, strftime
 from six.moves import xrange
 
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
+
+from PIL import Image
+import skimage
+import skimage.io
+import skimage.transform
+# from skimage import transform,io
 
 pp = pprint.PrettyPrinter()
 
@@ -34,9 +41,13 @@ def save_images(images, size, image_path):
 
 def imread(path, grayscale = False):
   if (grayscale):
-    return scipy.misc.imread(path, flatten = True).astype(np.float)
+    # return scipy.misc.imread(path, flatten = True).astype(np.float)    
+    # return imageio.imread(path, flatten = True).astype(np.float)
+    return skimage.io.imread(path, flatten = True).astype(np.float)
   else:
-    return scipy.misc.imread(path).astype(np.float)
+    # return scipy.misc.imread(path).astype(np.float)    
+    # return imageio.imread(path).astype(np.float)
+    return skimage.io.imread(path).astype(np.float)
 
 def merge_images(images, size):
   return inverse_transform(images)
@@ -64,7 +75,13 @@ def merge(images, size):
 
 def imsave(images, size, path):
   image = np.squeeze(merge(images, size))
-  return scipy.misc.imsave(path, image)
+  # return scipy.misc.imsave(path, image)
+  print("-="*42)
+  print(image)
+  print(path)
+  print("-="*42)
+  skimage.io.imsave(path+"_____.png", images[0])
+  return skimage.io.imsave(path, image)
 
 def center_crop(x, crop_h, crop_w,
                 resize_h=64, resize_w=64):
@@ -73,8 +90,8 @@ def center_crop(x, crop_h, crop_w,
   h, w = x.shape[:2]
   j = int(round((h - crop_h)/2.))
   i = int(round((w - crop_w)/2.))
-  return scipy.misc.imresize(
-      x[j:j+crop_h, i:i+crop_w], [resize_h, resize_w])
+  # return scipy.misc.imresize(x[j:j+crop_h, i:i+crop_w], [resize_h, resize_w])
+  return skimage.transform.resize(x[j:j+crop_h, i:i+crop_w], [resize_h, resize_w])
 
 def transform(image, input_height, input_width, 
               resize_height=64, resize_width=64, crop=True):
@@ -83,7 +100,15 @@ def transform(image, input_height, input_width,
       image, input_height, input_width, 
       resize_height, resize_width)
   else:
-    cropped_image = scipy.misc.imresize(image, [resize_height, resize_width])
+    # image_array = np.array(image)
+    # print("*="*42)
+    # print("type(image)",type(image))
+    # print("type(image_array)",type(image_array))
+    # print("*="*42)    
+    # cropped_image = Image.fromarray(image).resize((resize_height, resize_width))
+    # cropped_image = np.array(cropped_image)
+    # # cropped_image = scipy.misc.imresize(image, [resize_height, resize_width])
+    cropped_image = skimage.transform.resize(image, [resize_height, resize_width])
   return np.array(cropped_image)/127.5 - 1.
 
 def inverse_transform(images):
