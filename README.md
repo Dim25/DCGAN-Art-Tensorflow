@@ -1,3 +1,8 @@
+Fork of sinanatra/DCGAN-Art-Tensorflow with updates to `model.py` and `util.py`
+Original code available here: https://github.com/sinanatra/DCGAN-Art-Tensorflow
+
+------
+
 # Art and Design DCGAN in Tensorflow
 
 Modified version of Taehoon Kim’s tensorflow implementation of DCGAN `https://carpedm20.github.io/faces/` with a focus on generating paintings and soon graphic design.
