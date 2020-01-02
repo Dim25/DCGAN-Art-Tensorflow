@@ -1,5 +1,6 @@
 import os
 import scipy.misc
+import imageio
 import numpy as np
 
 from model import DCGAN
