@@ -76,11 +76,13 @@ def merge(images, size):
 def imsave(images, size, path):
   image = np.squeeze(merge(images, size))
   # return scipy.misc.imsave(path, image)
-  print("-="*42)
-  print(image)
-  print(path)
-  print("-="*42)
-  skimage.io.imsave(path+"_____.png", images[0])
+  # # [DEBUG] check the input date
+  # print("-="*42)
+  # print(image)
+  # print(path)
+  # print("-="*42)
+  # [DEBUG] single image output
+  skimage.io.imsave(path.replace(".png","_first_img.png"), images[0])
   return skimage.io.imsave(path, image)
 
 def center_crop(x, crop_h, crop_w,
