@@ -1,5 +1,6 @@
-Fork of @sinanatra's __DCGAN__ with updates to `model.py` and `util.py`  
-Original code available here: https://github.com/sinanatra/DCGAN-Art-Tensorflow
+# WikiART DCGAN 1
+
+DCGAN model, utils and ops based on updated version of: https://github.com/sinanatra/DCGAN-Art-Tensorflow (by @sinanatra)
 
 ------
 
