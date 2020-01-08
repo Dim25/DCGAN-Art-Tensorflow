@@ -11,6 +11,7 @@ import imageio
 import numpy as np
 from time import gmtime, strftime
 from six.moves import xrange
+import os
 
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
@@ -96,8 +97,76 @@ def center_crop(x, crop_h, crop_w,
   return skimage.transform.resize(x[j:j+crop_h, i:i+crop_w], [resize_h, resize_w])
 
 def transform(image, input_height, input_width, 
-              resize_height=64, resize_width=64, crop=True):
-  if crop:
+              resize_height=64, resize_width=64, crop=True, random_crop=True):
+
+  # On the fly img color-space reshape
+  if len(image.shape) == 2:
+    # # Convert to RGB
+    # image = Image.fromarray(image)
+    # RGB = image.convert('RGB')
+    # image = np.array(image)
+    return None # to ignore grayscale images
+
+  if image.shape[2] == 1:
+    # # Convert to RGB
+    # image = Image.fromarray(image)
+    # RGB = image.convert('RGB')
+    # image = np.array(image)
+    return None # to ignore grayscale images
+
+  # (Option 1): 
+  if random_crop:
+    # size = [resize_height, resize_width, 3] # 3 - to keep RGB dimensions
+
+    # TensorFlow random_crop function (https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/image/random_crop)
+    # TF powered version
+    # image = tf.image.random_crop(
+    #     value=image,
+    #     size=size,
+    #     # seed=None,
+    #     # name=None
+    # )
+
+    # cropped_image = skimage.transform.resize(image, [resize_height, resize_width])
+
+    # print("-"*80)
+    # print(len(image))
+    # print(image.shape)
+
+    image_height = image.shape[0]
+    image_width = image.shape[1]
+
+    # print("image_height",image_height)
+    # print("image_width",image_width)  
+
+    # print(random.randint(0,9))
+    max_height = image_height - resize_height
+    max_width = image_width - resize_width
+
+    j = random.randint(0, max_height)
+    i = random.randint(0, max_width)
+
+    # import scipy.misc
+    # scipy.misc.imsave('___outfile_1.jpg', image)
+
+    image = image[j:j+resize_height, i:i+resize_width]
+
+    # print(j,j+resize_height)
+    # print(i,i+resize_width)  
+
+    # scipy.misc.imsave('___outfile_2.jpg', image)
+
+    # print("-"*80)
+    # Return croped image 
+    return np.array(image)/127.5 - 1.
+
+  # (Option 2) Use skimage for the speed? 
+  # ... in case we will need to speed this up or not use TF here  
+  # (Option 3) Use Augmentor for in-pipe augmentation? 
+  # ... 
+
+  # elif crop:
+  if crop: 
     cropped_image = center_crop(
       image, input_height, input_width, 
       resize_height, resize_width)
